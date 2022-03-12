@@ -34,7 +34,7 @@ def ask_scan_rate():
 
 
 def ask_device_mass():
-    return input('Qual a massa da amostra (em ng)? \n')
+    return input('Qual a massa da amostra (em ug)? \n')
 
 
 def ask_first_cycle_row():
@@ -78,44 +78,42 @@ def integrate_data(data_to_integrate, x_axis):
     return temp_list
 
 
-# data_path = ask_file_path('ciclovoltametria')
-# while is_not_valid_file(data_path):
-#     message_invalid_path()
-#     data_path = ask_file_path('ciclovoltametria')
-#
-# first_cycle_rows = ask_first_cycle_row()
-# FIRST_CYCLE_ROWS_AS_NUMBER = int(make_input_as_number(first_cycle_rows, ask_first_cycle_row))
-#
-# n_of_rows = ask_cycle_row_n()
-# N_OF_ROWS_AS_NUMBER = int(make_input_as_number(n_of_rows, ask_cycle_row_n))
-#
-# device_mass = ask_device_mass()
-# DEVICE_MASS_AS_NUMBER = make_input_as_number(device_mass, ask_device_mass) * 10 ** (-9)
-#
-# scan_rate = ask_scan_rate()
-# SCAN_RATE_AS_NUMBER = make_input_as_number(scan_rate, ask_scan_rate) * 10 ** (-3)
-#
-# potential_window = ask_potential_windows()
-# POTENTIAL_WINDOW_AS_NUMBER = make_input_as_number(potential_window, ask_potential_windows) * 10 ** (-3)
+data_path = ask_file_path('ciclovoltametria')
+while is_not_valid_file(data_path):
+    message_invalid_path()
+    data_path = ask_file_path('ciclovoltametria')
+
+first_cycle_rows = ask_first_cycle_row()
+FIRST_CYCLE_ROWS_AS_NUMBER = int(make_input_as_number(first_cycle_rows, ask_first_cycle_row))
+
+n_of_rows = ask_cycle_row_n()
+N_OF_ROWS_AS_NUMBER = int(make_input_as_number(n_of_rows, ask_cycle_row_n))
+
+device_mass = ask_device_mass()
+DEVICE_MASS_AS_NUMBER = make_input_as_number(device_mass, ask_device_mass) * 10 ** (-6)
+
+scan_rate = ask_scan_rate()
+SCAN_RATE_AS_NUMBER = make_input_as_number(scan_rate, ask_scan_rate) * 10 ** (-3)
+
+potential_window = ask_potential_windows()
+POTENTIAL_WINDOW_AS_NUMBER = make_input_as_number(potential_window, ask_potential_windows) * 10 ** (-3)
 
          # DADOS DE ENTRADA QUE VOCÊ ME PASSOU, SE QUISER RODAR OS SEUS TESTES SEM PRECISAR FICAR DANDO INPUT
             # É SÓ COMENTAR AS LINHAS DE INPUT E DESCOMENTAR ESTAS
 
-DEVICE_MASS_AS_NUMBER = 7.22 * 10 ** (-7)
-SCAN_RATE_AS_NUMBER = 0.2
-N_OF_ROWS_AS_NUMBER = 655
-POTENTIAL_WINDOW_AS_NUMBER = 0.8
-FIRST_CYCLE_ROWS_AS_NUMBER = 738
+# DEVICE_MASS_AS_NUMBER = 7.22 * 10 ** (-4)
+# SCAN_RATE_AS_NUMBER = 0.2
+# N_OF_ROWS_AS_NUMBER = 655
+# POTENTIAL_WINDOW_AS_NUMBER = 0.8
+# FIRST_CYCLE_ROWS_AS_NUMBER = 738
 PROP_CONSTANT = 1 / (DEVICE_MASS_AS_NUMBER * SCAN_RATE_AS_NUMBER * POTENTIAL_WINDOW_AS_NUMBER)
+# data_file = pd.read_table('C:/Users/robee/Desktop/ciclos MXene 15wt.% PEDOT PSS.txt', sep='\t', header=None)
 
-data_file = pd.read_table('C:/Users/robee/Desktop/ciclos MXene 15wt.% PEDOT PSS - testes.txt', sep='\t', header=None)
-
-# data_file = pd.read_table(data_path, sep='\t', header=None)
+data_file = pd.read_table(data_path, sep='\t', header=None)
 
 data_file_sliced = data_file.iloc[FIRST_CYCLE_ROWS_AS_NUMBER:, 1:]
 
 data_sanitized = sanitize_data(data_file_sliced)
-print(data_sanitized)
 
 voltage_data = data_sanitized.iloc[:, 1::3].transpose().to_numpy()
 current_data = data_sanitized.iloc[:, 2::3].transpose().to_numpy()
