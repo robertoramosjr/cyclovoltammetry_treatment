@@ -104,7 +104,7 @@ POTENTIAL_WINDOW_AS_NUMBER = make_input_as_number(potential_window, ask_potentia
 # data_file = pd.read_table('C:/Users/robee/Desktop/ciclos MXene 15wt.% PEDOT PSS - testes.txt', sep='\t', header=None)
 
 PROP_CONSTANT = 1 / (DEVICE_MASS_AS_NUMBER * SCAN_RATE_AS_NUMBER * POTENTIAL_WINDOW_AS_NUMBER)
-CYCLE_NUMBER = 4999
+CYCLE_NUMBER = 4998
 data_file = pd.read_table(data_path, sep='\t', header=None)
 
 data_file_sliced = data_file.iloc[FIRST_CYCLE_ROWS_AS_NUMBER:, 1:]
@@ -114,7 +114,7 @@ data_sanitized = sanitize_data(data_file_sliced)
 voltage_data = data_sanitized.iloc[:, 1::3].transpose().to_numpy()
 current_data = data_sanitized.iloc[:, 2::3].transpose().to_numpy()
 index_data = np.array(list(range(1, 2)))
-cycle_list = list(range(1, 3))
+cycle_list = list(range(1,  CYCLE_NUMBER))
 
 integral_values = integrate_data(current_data, voltage_data)
 
