@@ -1,16 +1,11 @@
 import pandas as pd
 import os.path
 from scipy import integrate
-import matplotlib.pyplot as plt
 import numpy as np
 
 
 def is_not_valid_file(file_path):
     return False if file_path != "" and os.path.exists(file_path) else True
-
-
-def is_bigger_data_frame(data_frame_1, data_frame_2):
-    return len(data_frame_1) > len(data_frame_2)
 
 
 def equalize_data_frame_rows(data_frame_1, data_frame_2):
@@ -25,7 +20,7 @@ def ask_file_path(measurement_name):
     return input(f"Insira o caminho do arquivo de {measurement_name} \n")
 
 
-def ask_potential_windows():
+def ask_potential_window():
     return input('Qual a janela de potencial utilizada (em mV)? \n')
 
 
@@ -95,20 +90,21 @@ DEVICE_MASS_AS_NUMBER = make_input_as_number(device_mass, ask_device_mass) * 10 
 scan_rate = ask_scan_rate()
 SCAN_RATE_AS_NUMBER = make_input_as_number(scan_rate, ask_scan_rate) * 10 ** (-3)
 
-potential_window = ask_potential_windows()
-POTENTIAL_WINDOW_AS_NUMBER = make_input_as_number(potential_window, ask_potential_windows) * 10 ** (-3)
+potential_window = ask_potential_window()
+POTENTIAL_WINDOW_AS_NUMBER = make_input_as_number(potential_window, ask_potential_window) * 10 ** (-3)
 
-         # DADOS DE ENTRADA QUE VOCÊ ME PASSOU, SE QUISER RODAR OS SEUS TESTES SEM PRECISAR FICAR DANDO INPUT
-            # É SÓ COMENTAR AS LINHAS DE INPUT E DESCOMENTAR ESTAS
+# ------------------ DADOS DE ENTRADA QUE VOCÊ ME PASSOU, SE QUISER RODAR OS SEUS TESTES SEM PRECISAR FICAR DANDO INPUT
+# -------------------------------- É SÓ COMENTAR AS LINHAS DE INPUT E DESCOMENTAR ESTAS
 
 # DEVICE_MASS_AS_NUMBER = 7.22 * 10 ** (-4)
 # SCAN_RATE_AS_NUMBER = 0.2
 # N_OF_ROWS_AS_NUMBER = 655
 # POTENTIAL_WINDOW_AS_NUMBER = 0.8
 # FIRST_CYCLE_ROWS_AS_NUMBER = 738
-PROP_CONSTANT = 1 / (DEVICE_MASS_AS_NUMBER * SCAN_RATE_AS_NUMBER * POTENTIAL_WINDOW_AS_NUMBER)
-# data_file = pd.read_table('C:/Users/robee/Desktop/ciclos MXene 15wt.% PEDOT PSS.txt', sep='\t', header=None)
+# data_file = pd.read_table('C:/Users/robee/Desktop/ciclos MXene 15wt.% PEDOT PSS - testes.txt', sep='\t', header=None)
 
+PROP_CONSTANT = 1 / (DEVICE_MASS_AS_NUMBER * SCAN_RATE_AS_NUMBER * POTENTIAL_WINDOW_AS_NUMBER)
+CYCLE_NUMBER = 4999
 data_file = pd.read_table(data_path, sep='\t', header=None)
 
 data_file_sliced = data_file.iloc[FIRST_CYCLE_ROWS_AS_NUMBER:, 1:]
@@ -118,21 +114,15 @@ data_sanitized = sanitize_data(data_file_sliced)
 voltage_data = data_sanitized.iloc[:, 1::3].transpose().to_numpy()
 current_data = data_sanitized.iloc[:, 2::3].transpose().to_numpy()
 index_data = np.array(list(range(1, 2)))
+cycle_list = list(range(1, 3))
 
 integral_values = integrate_data(current_data, voltage_data)
 
 capacitance = [element * PROP_CONSTANT for element in integral_values]
 
-pd.DataFrame(capacitance).to_csv(ask_file_name(), sep='\t', decimal=',')
+percentile_var = [element * 100 / capacitance[0] for element in capacitance]
 
-for key, value in enumerate(current_data):
-    plt.plot(voltage_data[key][:], current_data[key][:], 'o')
-plt.show()
+pd.DataFrame([cycle_list, capacitance, percentile_var])\
+    .transpose()\
+    .to_csv(ask_file_name(), sep='\t', decimal=',', index=False, header=['ciclo', 'C F/g', '% do ciclo 1'])
 
-
-"""
-Por enquanto está configurado para plotar ixv pois comecei encontrar uns erros e não tive tempo de corrigir.
-Quando eu conseguir mexer de novo, arrumarei este erro e farei com que o script plote para você capacitância x número
-do ciclo.
-Claro, isso se for interessante para você, se não for, me diga por favor!
-"""
