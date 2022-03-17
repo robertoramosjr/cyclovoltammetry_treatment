@@ -58,8 +58,8 @@ def sanitize_data(data_frame):
     x = 0
     temp_data = pd.DataFrame()
     while x < len(data_frame):
-        temp_data = pd.concat([temp_data, data_frame.iloc[x:x + (N_OF_ROWS_AS_NUMBER + 1), :].reset_index()], axis=1)
-        x += N_OF_ROWS_AS_NUMBER + 1
+        temp_data = pd.concat([temp_data, data_frame.iloc[x:x + (N_OF_ROWS_AS_NUMBER - 1), :].reset_index()], axis=1)
+        x += N_OF_ROWS_AS_NUMBER
     return temp_data
 
 
@@ -93,25 +93,24 @@ POTENTIAL_WINDOW_AS_NUMBER = make_input_as_number(potential_window, ask_potentia
 # ------------------ DADOS DE ENTRADA QUE VOCÊ ME PASSOU, SE QUISER RODAR OS SEUS TESTES SEM PRECISAR FICAR DANDO INPUT
 # -------------------------------- É SÓ COMENTAR AS LINHAS DE INPUT E DESCOMENTAR ESTAS
 
-#
+
 # DEVICE_MASS_AS_NUMBER = 7.22 * 10 ** (-4)
 # SCAN_RATE_AS_NUMBER = 0.2
-# N_OF_ROWS_AS_NUMBER = 655
+# N_OF_ROWS_AS_NUMBER = 656
 # POTENTIAL_WINDOW_AS_NUMBER = 0.8
-# FIRST_CYCLE_ROWS_AS_NUMBER = 738
+# FIRST_CYCLE_ROWS_AS_NUMBER = 739
 # data_file = pd.read_table('C:/Users/robee/Desktop/ciclos MXene 15wt.% PEDOT PSS.txt', sep='\t')
 
 PROP_CONSTANT = 1 / (DEVICE_MASS_AS_NUMBER * SCAN_RATE_AS_NUMBER * POTENTIAL_WINDOW_AS_NUMBER)
 CYCLE_NUMBER = 5000
 data_file = pd.read_table(data_path, sep='\t')
 
-data_file_sliced = data_file.iloc[(FIRST_CYCLE_ROWS_AS_NUMBER+1):, 1:]
+data_file_sliced = data_file.iloc[(FIRST_CYCLE_ROWS_AS_NUMBER-1):, :]
 
 data_sanitized = sanitize_data(data_file_sliced)
 
 voltage_data = data_sanitized.iloc[:, 1::3].transpose().to_numpy()
 current_data = data_sanitized.iloc[:, 2::3].transpose().to_numpy()
-index_data = np.array(list(range(1, 2)))
 cycle_list = list(range(1,  CYCLE_NUMBER))
 
 integral_values = integrate_data(current_data, voltage_data)
