@@ -2,14 +2,11 @@ import pandas as pd
 import os.path
 from scipy import integrate
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 def is_not_valid_file(file_path):
     return False if file_path != "" and os.path.exists(file_path) else True
-
-
-def equalize_data_frame_rows(data_frame_1, data_frame_2):
-    return data_frame_1.loc[0:len(data_frame_2)-1, :]
 
 
 def ask_file_name():
@@ -61,7 +58,7 @@ def sanitize_data(data_frame):
     x = 0
     temp_data = pd.DataFrame()
     while x < len(data_frame):
-        temp_data = pd.concat([temp_data, data_frame.iloc[x:x + N_OF_ROWS_AS_NUMBER, :].reset_index()], axis=1)
+        temp_data = pd.concat([temp_data, data_frame.iloc[x:x + (N_OF_ROWS_AS_NUMBER + 1), :].reset_index()], axis=1)
         x += N_OF_ROWS_AS_NUMBER + 1
     return temp_data
 
@@ -96,19 +93,19 @@ POTENTIAL_WINDOW_AS_NUMBER = make_input_as_number(potential_window, ask_potentia
 # ------------------ DADOS DE ENTRADA QUE VOCÊ ME PASSOU, SE QUISER RODAR OS SEUS TESTES SEM PRECISAR FICAR DANDO INPUT
 # -------------------------------- É SÓ COMENTAR AS LINHAS DE INPUT E DESCOMENTAR ESTAS
 
+#
 # DEVICE_MASS_AS_NUMBER = 7.22 * 10 ** (-4)
 # SCAN_RATE_AS_NUMBER = 0.2
 # N_OF_ROWS_AS_NUMBER = 655
 # POTENTIAL_WINDOW_AS_NUMBER = 0.8
 # FIRST_CYCLE_ROWS_AS_NUMBER = 738
-# data_file = pd.read_table('C:/Users/robee/Desktop/ciclos MXene 15wt.% PEDOT PSS - testes.txt', sep='\t', header=None)
+# data_file = pd.read_table('C:/Users/robee/Desktop/ciclos MXene 15wt.% PEDOT PSS.txt', sep='\t')
 
 PROP_CONSTANT = 1 / (DEVICE_MASS_AS_NUMBER * SCAN_RATE_AS_NUMBER * POTENTIAL_WINDOW_AS_NUMBER)
 CYCLE_NUMBER = 5000
 data_file = pd.read_table(data_path, sep='\t')
-print(data_file)
 
-data_file_sliced = data_file.iloc[FIRST_CYCLE_ROWS_AS_NUMBER:, 1:]
+data_file_sliced = data_file.iloc[(FIRST_CYCLE_ROWS_AS_NUMBER+1):, 1:]
 
 data_sanitized = sanitize_data(data_file_sliced)
 
@@ -125,5 +122,13 @@ percentile_var = [element * 100 / capacitance[0] for element in capacitance]
 
 pd.DataFrame([cycle_list, capacitance, percentile_var])\
     .transpose()\
-    .to_csv(ask_file_name(), sep='\t', decimal=',', index=False, header=['ciclo', 'C F/g', '% do ciclo 1'])
+    .to_csv(
+    ask_file_name(),
+    sep='\t',
+    decimal=',',
+    index=False,
+    header=['ciclo', 'C F/g', '% do ciclo 1']
+    )
 
+plt.plot(cycle_list, capacitance, 'or')
+plt.show()
