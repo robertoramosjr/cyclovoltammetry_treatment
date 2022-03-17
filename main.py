@@ -91,17 +91,6 @@ SCAN_RATE_AS_NUMBER = make_input_as_number(scan_rate, ask_scan_rate) * 10 ** (-3
 potential_window = ask_potential_window()
 POTENTIAL_WINDOW_AS_NUMBER = make_input_as_number(potential_window, ask_potential_window) * 10 ** (-3)
 
-# ------------------ DADOS DE ENTRADA QUE VOCÊ ME PASSOU, SE QUISER RODAR OS SEUS TESTES SEM PRECISAR FICAR DANDO INPUT
-# -------------------------------- É SÓ COMENTAR AS LINHAS DE INPUT E DESCOMENTAR ESTAS
-
-
-# DEVICE_MASS_AS_NUMBER = 7.22 * 10 ** (-4)
-# SCAN_RATE_AS_NUMBER = 0.2
-# N_OF_ROWS_AS_NUMBER = 656
-# POTENTIAL_WINDOW_AS_NUMBER = 0.8
-# FIRST_CYCLE_ROWS_AS_NUMBER = 739
-# data_file = pd.read_table('C:/Users/robee/Desktop/ciclos MXene 15wt.% PEDOT PSS.txt', sep='\t')
-
 PROP_CONSTANT = 1 / (DEVICE_MASS_AS_NUMBER * SCAN_RATE_AS_NUMBER * POTENTIAL_WINDOW_AS_NUMBER)
 CYCLE_NUMBER = 5000
 data_file = pd.read_table(data_path, sep='\t')
