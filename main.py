@@ -59,7 +59,7 @@ def sanitize_data(data_frame):
     for x in list(range(0, len(data_frame), N_OF_ROWS_AS_NUMBER)):
         temp_data = pd.concat([temp_data, data_frame.iloc[x:x + (N_OF_ROWS_AS_NUMBER - 1), :].reset_index()], axis=1)
         if x % 100 != 0:
-            sys.stdout.write("\rCarregando... {0} %".format((float(x) / len(data_frame)) * 100))
+            sys.stdout.write("\rCarregando... {0:.2f} % \n".format((float(x) / len(data_frame)) * 100))
             sys.stdout.flush()
     return temp_data
 
@@ -100,7 +100,7 @@ POTENTIAL_WINDOW_AS_NUMBER = make_input_as_number(potential_window, ask_potentia
 # N_OF_ROWS_AS_NUMBER = 656
 # POTENTIAL_WINDOW_AS_NUMBER = 0.8
 # FIRST_CYCLE_ROWS_AS_NUMBER = 739
-# data_file = pd.read_table('C:/Users/robee/Desktop/ciclos MXene 15wt.% PEDOT PSS - testes.txt', sep='\t')
+# data_file = pd.read_table('C:/Users/robee/Desktop/ciclos MXene 15wt.% PEDOT PSS.txt', sep='\t')
 
 PROP_CONSTANT = 1 / (DEVICE_MASS_AS_NUMBER * SCAN_RATE_AS_NUMBER * POTENTIAL_WINDOW_AS_NUMBER)
 CYCLE_NUMBER = 5000
