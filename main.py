@@ -1,7 +1,6 @@
 import pandas as pd
 import os.path
 from scipy import integrate
-import numpy as np
 import matplotlib.pyplot as plt
 
 
