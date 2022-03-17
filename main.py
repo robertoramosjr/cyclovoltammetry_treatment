@@ -68,43 +68,43 @@ def integrate_data(data_to_integrate, x_axis):
         temp_list.append(integrate.trapezoid(data_to_integrate[k], x_axis[k]))
     return temp_list
 
-
-data_path = ask_file_path('ciclovoltametria')
-while is_not_valid_file(data_path):
-    message_invalid_path()
-    data_path = ask_file_path('ciclovoltametria')
-
-first_cycle_rows = ask_first_cycle_row()
-FIRST_CYCLE_ROWS_AS_NUMBER = int(make_input_as_number(first_cycle_rows, ask_first_cycle_row))
-
-n_of_rows = ask_cycle_row_n()
-N_OF_ROWS_AS_NUMBER = int(make_input_as_number(n_of_rows, ask_cycle_row_n))
-
-device_mass = ask_device_mass()
-DEVICE_MASS_AS_NUMBER = make_input_as_number(device_mass, ask_device_mass) * 10 ** (-6)
-
-scan_rate = ask_scan_rate()
-SCAN_RATE_AS_NUMBER = make_input_as_number(scan_rate, ask_scan_rate) * 10 ** (-3)
-
-potential_window = ask_potential_window()
-POTENTIAL_WINDOW_AS_NUMBER = make_input_as_number(potential_window, ask_potential_window) * 10 ** (-3)
+#
+# data_path = ask_file_path('ciclovoltametria')
+# while is_not_valid_file(data_path):
+#     message_invalid_path()
+#     data_path = ask_file_path('ciclovoltametria')
+#
+# first_cycle_rows = ask_first_cycle_row()
+# FIRST_CYCLE_ROWS_AS_NUMBER = int(make_input_as_number(first_cycle_rows, ask_first_cycle_row))
+#
+# n_of_rows = ask_cycle_row_n()
+# N_OF_ROWS_AS_NUMBER = int(make_input_as_number(n_of_rows, ask_cycle_row_n))
+#
+# device_mass = ask_device_mass()
+# DEVICE_MASS_AS_NUMBER = make_input_as_number(device_mass, ask_device_mass) * 10 ** (-6)
+#
+# scan_rate = ask_scan_rate()
+# SCAN_RATE_AS_NUMBER = make_input_as_number(scan_rate, ask_scan_rate) * 10 ** (-3)
+#
+# potential_window = ask_potential_window()
+# POTENTIAL_WINDOW_AS_NUMBER = make_input_as_number(potential_window, ask_potential_window) * 10 ** (-3)
 
 # ------------------ DADOS DE ENTRADA QUE VOCÊ ME PASSOU, SE QUISER RODAR OS SEUS TESTES SEM PRECISAR FICAR DANDO INPUT
 # -------------------------------- É SÓ COMENTAR AS LINHAS DE INPUT E DESCOMENTAR ESTAS
 
 
-# DEVICE_MASS_AS_NUMBER = 7.22 * 10 ** (-4)
-# SCAN_RATE_AS_NUMBER = 0.2
-# N_OF_ROWS_AS_NUMBER = 656
-# POTENTIAL_WINDOW_AS_NUMBER = 0.8
-# FIRST_CYCLE_ROWS_AS_NUMBER = 739
-# data_file = pd.read_table('C:/Users/robee/Desktop/ciclos MXene 15wt.% PEDOT PSS.txt', sep='\t')
+DEVICE_MASS_AS_NUMBER = 7.22 * 10 ** (-4)
+SCAN_RATE_AS_NUMBER = 0.2
+N_OF_ROWS_AS_NUMBER = 656
+POTENTIAL_WINDOW_AS_NUMBER = 0.8
+FIRST_CYCLE_ROWS_AS_NUMBER = 739
+data_file = pd.read_table('C:/Users/robee/Desktop/ciclos MXene 15wt.% PEDOT PSS.txt', sep='\t')
 
 PROP_CONSTANT = 1 / (DEVICE_MASS_AS_NUMBER * SCAN_RATE_AS_NUMBER * POTENTIAL_WINDOW_AS_NUMBER)
 CYCLE_NUMBER = 5000
-data_file = pd.read_table(data_path, sep='\t')
+# data_file = pd.read_table(data_path, sep='\t')
 
-data_file_sliced = data_file.iloc[(FIRST_CYCLE_ROWS_AS_NUMBER-1):, :]
+data_file_sliced = data_file.iloc[(FIRST_CYCLE_ROWS_AS_NUMBER-1):, 1:]
 
 data_sanitized = sanitize_data(data_file_sliced)
 
