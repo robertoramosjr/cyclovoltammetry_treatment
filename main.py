@@ -3,6 +3,8 @@ import os.path
 from scipy import integrate
 import matplotlib.pyplot as plt
 import sys
+from time import sleep
+from tqdm import tqdm
 
 
 def is_not_valid_file(file_path):
@@ -56,11 +58,8 @@ def make_input_as_number(number, function):
 
 def sanitize_data(data_frame):
     temp_data = pd.DataFrame()
-    for x in list(range(0, len(data_frame), N_OF_ROWS_AS_NUMBER)):
+    for x in tqdm(list(range(0, len(data_frame), N_OF_ROWS_AS_NUMBER))):
         temp_data = pd.concat([temp_data, data_frame.iloc[x:x + (N_OF_ROWS_AS_NUMBER - 1), :].reset_index()], axis=1)
-        if x % 100 != 0:
-            sys.stdout.write("\rCarregando... {0:.2f} % \n".format((float(x) / len(data_frame)) * 100))
-            sys.stdout.flush()
     return temp_data
 
 
@@ -94,6 +93,7 @@ POTENTIAL_WINDOW_AS_NUMBER = make_input_as_number(potential_window, ask_potentia
 PROP_CONSTANT = 1 / (DEVICE_MASS_AS_NUMBER * SCAN_RATE_AS_NUMBER * POTENTIAL_WINDOW_AS_NUMBER)
 CYCLE_NUMBER = 5000
 data_file = pd.read_table(data_path, sep='\t')
+
 
 data_file_sliced = data_file.iloc[(FIRST_CYCLE_ROWS_AS_NUMBER-1):, 1:]
 
