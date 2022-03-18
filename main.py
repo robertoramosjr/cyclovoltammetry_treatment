@@ -2,8 +2,6 @@ import pandas as pd
 import os.path
 from scipy import integrate
 import matplotlib.pyplot as plt
-import sys
-from time import sleep
 from tqdm import tqdm
 
 
