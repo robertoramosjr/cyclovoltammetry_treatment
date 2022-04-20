@@ -56,7 +56,7 @@ def make_input_as_number(number, function):
 
 def sanitize_data(data_frame):
     temp_data = pd.DataFrame()
-    for x in tqdm(list(range(0, len(data_frame), N_OF_ROWS_AS_NUMBER))):
+    for x in tqdm(list(range(0, len(data_frame), N_OF_ROWS_AS_NUMBER)), desc='Carregando...'):
         temp_data = pd.concat([temp_data, data_frame.iloc[x:x + (N_OF_ROWS_AS_NUMBER - 1), :].reset_index()], axis=1)
     return temp_data
 
@@ -87,11 +87,10 @@ SCAN_RATE_AS_NUMBER = make_input_as_number(scan_rate, ask_scan_rate) * 10 ** (-3
 
 potential_window = ask_potential_window()
 POTENTIAL_WINDOW_AS_NUMBER = make_input_as_number(potential_window, ask_potential_window) * 10 ** (-3)
+data_file = pd.read_table(data_path, sep='\t')
 
 PROP_CONSTANT = 1 / (DEVICE_MASS_AS_NUMBER * SCAN_RATE_AS_NUMBER * POTENTIAL_WINDOW_AS_NUMBER)
 CYCLE_NUMBER = 5000
-data_file = pd.read_table(data_path, sep='\t')
-
 
 data_file_sliced = data_file.iloc[(FIRST_CYCLE_ROWS_AS_NUMBER-1):, 1:]
 
